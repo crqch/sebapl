@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="%lang%">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%sveltekit.assets%/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    (function () {
+      const saved = localStorage.getItem('theme');
+      const theme = saved || 'light';
+
+      // Create a style element to disable transitions temporarily
+      const style = document.createElement('style');
+      style.textContent = `
+      *, *::before, *::after {
+        transition-duration: 0s !important;
+        animation-duration: 0s !important;
+      }
+    `;
+      document.head.appendChild(style);
+
+      const setTheme = () => {
+        document.body.setAttribute('data-theme', theme);
+
+        // Re-enable transitions after theme is applied
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            document.head.removeChild(style);
+          });
+        });
+      };
+
+      if (document.body) {
+        setTheme();
+      } else {
+        document.addEventListener('DOMContentLoaded', setTheme);
+      }
+    })();
+  </script>
+
+  %sveltekit.head%
+</head>
+
+<body data-sveltekit-preload-data="hover">
+  <div style="display: contents">%sveltekit.body%</div>
+</body>
+
+</html>

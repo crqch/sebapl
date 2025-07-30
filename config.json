@@ -1,0 +1,17 @@
+{
+  "$schema": "./schemas/config.schema.json",
+  "name": {
+    "full": "SEBAPL Stack Demo",
+    "short": "SEBAPL"
+  },
+  "urls": {
+    "local": {
+      "frontend": "http://localhost:5173",
+      "backend": "http://localhost:3000"
+    },
+    "production": {
+      "frontend": "https://",
+      "backend": "https://"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "sebapl-stack",
+  "module": "index.ts",
+  "devDependencies": {
+    "@types/bun": "^1.2.13",
+    "bun-types": "^1.2.19",
+    "concurrently": "^9.1.2",
+    "dotenv-cli": "^9.0.0"
+  },
+  "author": {
+    "name": "crqch",
+    "url": "https://github.com/crqch/"
+  },
+  "version": "0.1",
+  "scripts": {
+    "clean": "rm -rf node_modules packages/server/node_modules packages/client/node_modules",
+    "dev:client": "cd packages/client && bun run dev",
+    "dev:server": "cd packages/server && dotenv -e ../../.env -- bun run dev",
+    "dev": "concurrently \"bun run dev:server\" \"bun run dev:client\"",
+    "prisma:generate": "cd packages/server && dotenv -e ../../.env -- bun prisma generate",
+    "prisma:migrate": "cd packages/server && dotenv -e ../../.env -- bun prisma migrate dev",
+    "prisma:studio": "cd packages/server && dotenv -e ../../.env -- bun prisma studio",
+    "prisma:migrate:prod": "cd packages/server && dotenv -e .env.prod -- bun prisma migrate deploy"
+  },
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {
+    "better-auth": "^1.2.7",
+    "typescript": "^5.9.0-beta"
+  }
+}

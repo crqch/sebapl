@@ -1,0 +1,114 @@
+model User {
+    id                String  @id @unique @default(cuid())
+    name              String
+    email             String  @unique
+    password          String?
+    username          String? @unique
+    preferredLanguage String  @default("en")
+    emailVerified     Boolean @default(false)
+    ranks             Rank[]
+
+    // Authentication
+    accessTokens  AccessToken[]
+    refreshTokens RefreshToken[]
+    sessions      Session[]
+    accounts      Account[]
+
+    // Purchases and Subscription
+    purchases             Purchase[]
+    subscriptionStatus    SubscriptionStatus @default(FREE)
+    subscriptionPlan      String?
+    subscriptionExpiresAt DateTime?
+    subscriptionRenewsAt  DateTime?
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("users")
+}
+
+model AccessToken {
+    id        String   @id @default(cuid())
+    token     String   @unique
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    expiresAt DateTime
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([userId])
+}
+
+model RefreshToken {
+    id        String   @id @default(cuid())
+    token     String   @unique
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    expiresAt DateTime
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([userId])
+}
+
+model Session {
+    id        String   @id @default(cuid())
+    expiresAt DateTime
+    token     String   @unique
+    ipAddress String?
+    userAgent String?
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("session")
+}
+
+model Account {
+    id                    String    @id @default(cuid())
+    accountId             String
+    providerId            String
+    userId                String
+    user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    accessToken           String?
+    refreshToken          String?
+    idToken               String?
+    accessTokenExpiresAt  DateTime?
+    refreshTokenExpiresAt DateTime?
+    scope                 String?
+    password              String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("account")
+}
+
+model Verification {
+    id         String   @id @default(cuid())
+    identifier String
+    value      String
+    expiresAt  DateTime
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    @@map("verification")
+}
+
+enum Rank {
+    ADMIN
+    DEFAULT
+}
+
+enum SubscriptionStatus {
+    FREE
+    ACTIVE
+    EXPIRED
+    CANCELLED
+    PAST_DUE
+}
