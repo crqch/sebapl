@@ -1,5 +1,5 @@
 import { appUrls } from 'shared';
-import '../global.d.ts';
+import './types/global';
 
 global.env = process.argv.join(' ').includes('PREVIEW')
   ? 'preview'

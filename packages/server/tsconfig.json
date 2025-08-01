@@ -23,6 +23,6 @@
     "skipLibCheck": true,
   },
   "include": [
-    "global.d.ts"
+    "./src/types/global.ts"
   ]
 }
